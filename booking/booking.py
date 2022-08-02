@@ -9,14 +9,14 @@ from booking.booking_filtration import BookingFiltration
 
 
 
-class Booking(webdriver.Chrome):
-    def __init__(self, driver_path=r'C:\Users\t90na\Downloads\chromedriver_win32', teardown = False):
+class Booking(webdriver.Chrome):  #the main Class in the project inherited from webdriver.Chrome class
+    def __init__(self, driver_path=r'C:\Users\t90na\Downloads\chromedriver_win32', teardown = True):
         self.driver_path = driver_path
         self.teardown = teardown
         os.environ["PATH"] += self.driver_path   # always add the driver path to the environment variables
         super().__init__()
         self.implicitly_wait(30)
-        #self.maximize_window()
+        self.maximize_window()
 
     def land_first_page(self):
         self.get(const.BASE_URL)
@@ -25,6 +25,7 @@ class Booking(webdriver.Chrome):
         if self.teardown:
             self.quit()  #this with shut down the browser after all commends inside "with" finishes.
 
+    #change currency
     def choose_your_currency(self, currency = 'USD'):
         currency_element = self.find_element_by_css_selector(
             'button,[data-tooltip-text="Choose your currency"]'
@@ -35,6 +36,7 @@ class Booking(webdriver.Chrome):
         )
         new_currency.click()
 
+    #select where to go
     def choose_your_destination(self, place_to_go):
         dest = self.find_element_by_id("ss")
         dest.clear()   #clean search bar
@@ -44,6 +46,7 @@ class Booking(webdriver.Chrome):
         )
         my_dest.click()
 
+    #select check-in and check-out dates in the format of 'yyyy-mm-dd'
     def select_dates(self, checkin_date, checkout_date):
         checkin_element = self.find_element_by_css_selector(
             f'td[data-date="{checkin_date}"]'
@@ -55,6 +58,7 @@ class Booking(webdriver.Chrome):
         )
         checkout_element.click()
 
+    #specify number of adults
     def how_many_adults(self, count=2):
         adults = self.find_element_by_id("xp__guests__toggle")
         adults.click()
@@ -80,9 +84,10 @@ class Booking(webdriver.Chrome):
         search.click()
 
 
+    #filtering results
     def apply_Filtrations(self):
         filtration = BookingFiltration(driver=self)
-        filtration.apply_star_rating(4, 5)
-        filtration.sort_price_lowest_first()
+        filtration.apply_star_rating(4, 5)   # filtering according to star rating
+        filtration.sort_price_lowest_first()  #filtering according to lowest price.
 
 

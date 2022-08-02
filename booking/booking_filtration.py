@@ -3,10 +3,10 @@
 #after we have some results, to apply filtration
 
 
-#use this to ensure autocomplition
+#use this to ensure autocomplition in Pycharm
 from selenium.webdriver.remote.webdriver import WebDriver
 
-class BookingFiltration:
+class BookingFiltration:   #new class
     def __init__(self, driver:WebDriver ):
         self.driver = driver
 
